@@ -99,13 +99,15 @@ class SearchAgent:
         else:
             try:
                 search_result: str = self.search_wrapper.run(query)
-                search_context = '\n'.join([
-                    '---',
-                    'Internet search result:',
-                    '---',
-                    'Question: ' + query,
-                    'Search Result: ' + search_result,
-                ])
+                search_context = '\n'.join(
+                    [
+                        '---',
+                        'Internet search result:',
+                        '---',
+                        f'Question: {query}',
+                        f'Search Result: {search_result}',
+                    ]
+                )
                 logger.info(f'Search result: {search_context}')
                 # Append to context
                 return '\n' + search_context
@@ -144,13 +146,15 @@ class QuivrAgent:
             response.raise_for_status()
             quivr_result = response.json()["assistant"]
 
-            quivr_context = '\n'.join([
-                '---',
-                'Second brain result:',
-                '---',
-                'Question: ' + query,
-                'Query Result: ' + quivr_result,
-            ])
+            quivr_context = '\n'.join(
+                [
+                    '---',
+                    'Second brain result:',
+                    '---',
+                    f'Question: {query}',
+                    f'Query Result: {quivr_result}',
+                ]
+            )
             logger.info(f'Quvir query result: {quivr_context}')
             # Append to context
             return '\n' + quivr_context

@@ -91,7 +91,7 @@ class GoogleCloudTTS(Singleton, TextToSpeech):
             voice_id = "en-US-Standard-C"
         headers = config.headers
         # For customized voices
-        
+
         # if language != 'en-US':
         #     config.data["voice"]["languageCode"] = language
         #     config.data["voice"]["name"] = voice_id
@@ -108,6 +108,4 @@ class GoogleCloudTTS(Singleton, TextToSpeech):
                 logger.error(f"Google Cloud TTS returns response {response.status_code}")
             else:
                 audio_content = response.content
-                # Decode the base64-encoded audio content
-                audio_content = base64.b64decode(audio_content)
-                return audio_content
+                return base64.b64decode(audio_content)

@@ -73,7 +73,7 @@ async def websocket_endpoint(websocket: WebSocket,
                              default_text_to_speech=Depends(get_text_to_speech)):
     # Default user_id to session_id. If auth is enabled and token is provided, use
     # the user_id from the token.
-    user_id = str(session_id)
+    user_id = session_id
     if os.getenv('USE_AUTH', ''):
         # Do not allow anonymous users to use non-GPT3.5 model.
         if not token and llm_model != 'gpt-3.5-turbo-16k':
@@ -187,18 +187,19 @@ async def handle_receive(websocket: WebSocket, session_id: str, user_id: str, db
                                               websocket=websocket)
 
         async def stop_audio():
-            if tts_task and not tts_task.done():
-                tts_event.set()
-                tts_task.cancel()
-                if previous_transcript:
-                    conversation_history.user.append(previous_transcript)
-                    conversation_history.ai.append(' '.join(token_buffer))
-                    token_buffer.clear()
-                try:
-                    await tts_task
-                except asyncio.CancelledError:
-                    pass
-                tts_event.clear()
+            if not tts_task or tts_task.done():
+                return
+            tts_event.set()
+            tts_task.cancel()
+            if previous_transcript:
+                conversation_history.user.append(previous_transcript)
+                conversation_history.ai.append(' '.join(token_buffer))
+                token_buffer.clear()
+            try:
+                await tts_task
+            except asyncio.CancelledError:
+                pass
+            tts_event.clear()
 
         while True:
             data = await websocket.receive()
