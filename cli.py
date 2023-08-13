@@ -8,8 +8,7 @@ import sys
 
 @click.group()
 def cli():
-    assert sys.version_info > (3, 10), "Python version must be newer than 3.10"    
-    pass
+    assert sys.version_info > (3, 10), "Python version must be newer than 3.10"
 
 
 @click.command()

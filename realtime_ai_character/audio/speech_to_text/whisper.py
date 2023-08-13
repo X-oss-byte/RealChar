@@ -69,15 +69,13 @@ class Whisper(Singleton, SpeechToText):
         segs, _ = self.model.transcribe(
             audio, language=language, vad_filter=True, initial_prompt=prompt
         )
-        text = " ".join([seg.text for seg in segs])
-        return text
+        return " ".join([seg.text for seg in segs])
 
     def _transcribe_api(self, audio, prompt=""):
-        text = self.recognizer.recognize_whisper_api(
+        return self.recognizer.recognize_whisper_api(
             audio,
             api_key=config.api_key,
         )
-        return text
 
     def _convert_webm_to_wav(self, webm_data, local=True):
         webm_audio = AudioSegment.from_file(io.BytesIO(webm_data), format="webm")
@@ -91,6 +89,5 @@ class Whisper(Singleton, SpeechToText):
 
     def _convert_bytes_to_wav(self, audio_bytes, local=True):
         if local:
-            audio = io.BytesIO(sr.AudioData(audio_bytes, 44100, 2).get_wav_data())
-            return audio
+            return io.BytesIO(sr.AudioData(audio_bytes, 44100, 2).get_wav_data())
         return sr.AudioData(audio_bytes, 44100, 2)

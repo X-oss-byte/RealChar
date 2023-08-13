@@ -61,5 +61,4 @@ class UnrealSpeech(Singleton, TextToSpeech):
             if response.status_code != 200:
                 logger.error(
                     f"Unreal Speech returns response {response.status_code}")
-            audio_bytes = await response.aread()
-            return audio_bytes
+            return await response.aread()

@@ -62,8 +62,8 @@ class CatalogManager(Singleton):
         character_id = yaml_content['character_id']
         character_name = yaml_content['character_name']
         voice_id = yaml_content['voice_id']
-        if (os.getenv(character_id.upper() + "_VOICE_ID", "")):
-            voice_id = os.getenv(character_id.upper() + "_VOICE_ID")
+        if os.getenv(f"{character_id.upper()}_VOICE_ID", ""):
+            voice_id = os.getenv(f"{character_id.upper()}_VOICE_ID")
         self.characters[character_id] = Character(
             character_id=character_id,
             name=character_name,
@@ -100,7 +100,7 @@ class CatalogManager(Singleton):
             character_name = self.load_character(directory)
             if overwrite:
                 self.load_data(character_name, directory / 'data')
-                logger.info('Loaded data for character: ' + character_name)
+                logger.info(f'Loaded data for character: {character_name}')
         logger.info(
             f'Loaded {len(self.characters)} characters: IDs {list(self.characters.keys())}')
 
@@ -134,7 +134,7 @@ class CatalogManager(Singleton):
 
             if overwrite:
                 self.load_data(character_name, directory / 'data')
-                logger.info('Loaded data for character: ' + character_name)
+                logger.info(f'Loaded data for character: {character_name}')
 
     def load_data(self, character_name: str, data_path: str):
         loader = SimpleDirectoryReader(Path(data_path))
